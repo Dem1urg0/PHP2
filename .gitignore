@@ -1,0 +1,8 @@
+/configs/
+/logs/
+/php/
+/php-fpm/
+/docker-compose.yml
+/databases/
+/databases/mariadb/mysql/
+/databases/mariadb/performance_schema/
