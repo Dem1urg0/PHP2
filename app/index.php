@@ -1,206 +1,234 @@
 <?php
-/* ЗАДАНИЕ 1
-Объявить две целочисленные переменные $a и $b и задать им произвольные начальные значения.
-Затем написать скрипт, который работает по следующему принципу:
-Если $a и $b положительные, вывести их разность.
-Если $а и $b отрицательные, вывести их произведение.
-Если $а и $b разных знаков, вывести их сумму.
-Ноль можно считать положительным числом.
-*/
+/*Задание 1*/
 echo "Задание 1<br>";
-$a = rand(-15, 15);
-$b = rand(-15, 15);
-echo "$a and $b <br>";
-if ($a >= 0 && $b >= 0) {
-    echo $a - $b;
-} else if ($a <= 0 && $b <= 0) {
-    echo $a * $b;
-} else {
-    echo $a + $b;
-}
-/* ЗАДАНИЕ 2
-Присвоить переменной $а значение в промежутке [0..15].
-С помощью оператора switch организовать вывод чисел от $a до 15.
+/*С помощью цикла while вывести все числа в промежутке от 0 до 100,
+которые делятся на 3 без остатка.
 */
+$i = 0;
+
+while ($i <= 100) {
+    if ($i % 3 == 0) {
+        echo "$i ";
+    }
+    $i++;
+}
+
+/*Задание 2*/
 echo "<br>Задание 2<br>";
-$a = rand(0, 15);
-echo "number:$a<br>";
-switch ($a) {
-    case 0:
-        echo "0<br>";
-    case 1:
-        echo "1<br>";
-    case 2:
-        echo "2<br>";
-    case 3:
-        echo "3<br>";
-    case 4:
-        echo "4<br>";
-    case 5:
-        echo "5<br>";
-    case 6:
-        echo "6<br>";
-    case 7:
-        echo "7<br>";
-    case 8:
-        echo "8<br>";
-    case 9:
-        echo "9<br>";
-    case 10:
-        echo "10<br>";
-    case 11:
-        echo "11<br>";
-    case 12:
-        echo "12<br>";
-    case 13:
-        echo "13<br>";
-    case 14:
-        echo "14<br>";
-    case 15:
-        echo "15<br>";
-}
-/* ЗАДАНИЕ 3
-Реализовать основные 4 арифметические операции в виде функций с двумя параметрами.
-Обязательно использовать оператор return.
+/*С помощью цикла do…while написать функцию для вывода чисел от 0 до 10, чтобы результат выглядел так:
+0 – это ноль.
+1 – нечётное число.
+2 – чётное число.
+3 – нечётное число.
+…
+10 – чётное число.
 */
-echo "Задание 3 <br>";
-echo "$a and $b <br>";
-function adding($a, $b)
-{
-    $c = $a + $b;
-    return "$c<br>";
-}
+$n = 0;
+do {
+    if ($n == 0) {
+        echo "$n - ноль ";
+    } else if ($n % 2 == 0) {
+        echo "$n - честное число ";
+    } else {
+        echo "$n - нечестное число ";
+    }
+    $n++;
+} while ($n <= 10);
 
-function subtract($a, $b)
-{
-    $c = $a - $b;
-    return "$c<br>";
-}
+/*Задание 3*/
+echo "<br>Задание 3<br>";
+/*Объявить массив, в котором в качестве ключей будут использоваться названия областей,
+а в качестве значений – массивы с названиями городов из соответствующей области.
+Вывести в цикле значения массива, чтобы результат был таким:
+Московская область:
+Москва, Зеленоград, Клин.
+Ленинградская область:
+Санкт-Петербург, Всеволожск, Павловск, Кронштадт.
+Рязанская область…(названия городов можно найти на maps.yandex.ru)
+*/
 
-function multiply($a, $b)
-{
-    $c = $a * $b;
-    return "$c<br>";
-}
-
-function split($a, $b)
-{
-    $c = $a / $b;
-    return "$c<br>";
-}
-
-echo adding($a, $b);
-echo subtract($a, $b);
-echo multiply($a, $b);
-echo split($a, $b);
-/* ЗАДАНИЕ 4*/
-echo "Задание 4 <br>";
-/* Реализовать функцию с тремя параметрами: function mathOperation($arg1, $arg2, $operation),
-где $arg1, $arg2 – значения аргументов, $operation – строка с названием операции.
-В зависимости от переданного значения операции выполнить одну из арифметических операций
-(использовать функции из пункта 3) и вернуть полученное значение (использовать switch).*/
-
-function mathOperation($arg1, $arg2, $operation)
-{
-    switch ($operation) {
-        case 'adding':
-            echo adding($arg1, $arg2);
-            break;
-        case 'subtract':
-            echo subtract($arg1, $arg2);
-            break;
-        case 'multiply':
-            echo multiply($arg1, $arg2);
-            break;
-        case 'split':
-            echo split($arg1, $arg2);
-            break;
+$map = [
+    'Moscow_obl' => ['Moscow', 'Khimki', 'Dedovsk'],
+    'Leningrad_obl' => ['Gatchina', 'Vyborg', 'Saint Petersburg'],
+    'Kaliningrad_obl' => ['Gusev', 'Sovetsk', 'Kaliningrad']
+];
+foreach ($map as $obl => $citys) {
+    echo "<br>$obl:<br>";
+    foreach ($citys as $city) {
+        if ($city == end($citys)) {
+            echo "$city.";
+        } else {
+            echo "$city, ";
+        }
     }
 }
 
-mathOperation(2, 3, 'subtract');
-/*ЗАДАНИЕ 5*/
-echo "Задание 5 <br>";
-/*Посмотреть на встроенные функции PHP. Используя имеющийся HTML шаблон,
-вывести текущий год в подвале при помощи встроенных функций PHP.
+/*Задание 4*/
+echo "<br>Задание 4<br>";
+/*Объявить массив, индексами которого являются буквы русского языка,
+ а значениями – соответствующие латинские буквосочетания
+(‘а’=> ’a’, ‘б’ => ‘b’, ‘в’ => ‘v’, ‘г’ => ‘g’, …, ‘э’ => ‘e’, ‘ю’ => ‘yu’, ‘я’ => ‘ya’).
+Написать функцию транслитерации строк.
 */
 
-$html = file_get_contents('html.html');
-echo str_replace('{{date}}', date('Y'), $html);
+$letters = [
+    'а' => 'a',
+    'б' => 'b',
+    'в' => 'v',
+    'г' => 'g',
+    'д' => 'd',
+    'е' => 'ea',
+    'ё' => 'yo',
+    'ж' => 'zh',
+    'з' => 'z',
+    'и' => 'i',
+    'й' => 'ii',
+    'к' => 'k',
+    'л' => 'l',
+    'м' => 'm',
+    'н' => 'n',
+    'о' => 'o',
+    'п' => 'p',
+    'р' => 'r',
+    'с' => 's',
+    'т' => 't',
+    'у' => 'u',
+    'ф' => 'f',
+    'х' => 'h',
+    'ц' => 'c',
+    'ч' => 'ch',
+    'ш' => 'sh',
+    'щ' => 'shch',
+    'ъ' => 'y',
+    'ы' => 'i',
+    'ь' => 'y',
+    'э' => 'e',
+    'ю' => 'iu',
+    'я' => 'ja'
+];
+function transtLetter($str)
+{
+    global $letters;
+    $newstr = '';
+    foreach (mb_str_split($str) as $letter) {
+        if (isset($letters[$letter])) {
+            $newstr .= $letters[$letter];
+        } else {
+            $newstr .= $letter;
+        }
+    }
+    return $newstr;
+}
 
-/*ЗАДАНИЕ 6 доп*/
-echo "Задание 6* <br>";
-/*С помощью рекурсии организовать функцию возведения числа в степень.
- Формат: function power($val, $pow), где $val – заданное число, $pow – степень.
+echo transtLetter('привет как дела?');
+
+/*Задание 5*/
+echo "<br>Задание 5<br>";
+/*Написать функцию, которая заменяет в строке пробелы на подчеркивания и возвращает видоизмененную строчку.
+*/
+
+function spaceChange($str)
+{
+    $newstr = '';
+    foreach (mb_str_split($str) as $sim) {
+        if ($sim == ' ') {
+            $newstr .= '_';
+        } else {
+            $newstr .= $sim;
+        }
+    }
+    return $newstr;
+}
+
+echo spaceChange('Как писать правильно?');
+
+/*Задание 6*/
+echo "<br>Задание 6<br>";
+/*В имеющемся шаблоне сайта заменить статичное меню (ul - li) на генерируемое через PHP.
+ Необходимо представить пункты меню как элементы массива и вывести их циклом. Подумать,
+ как можно реализовать меню с вложенными подменю? Попробовать его реализовать.
+*/
+$menu = [
+    'Главная' => [],
+    'Новости' => ['Новости о спорте', 'Новости о политике', 'Новости о мире'],
+    'Контакты' => [],
+    'Справка' => []
+];
+function menuGen($menu)
+{
+    $html = file_get_contents('index.html');
+    $menuRender = '';
+    foreach ($menu as $menuItem => $subMenuItems) {
+        if (count($subMenuItems) == 0) {
+            $menuRender .= "<div><a><span>$menuItem</span></a></div>";
+        } else {
+            $menuRender .= "<div><a><span>$menuItem</span></a><div>";
+            foreach ($subMenuItems as $subMenuItem) {
+                $menuRender .= "<a>$subMenuItem</a>";
+            }
+            $menuRender .= "</div>";
+        }
+        $menuRender .= "</div>";
+
+    }
+    echo str_replace('Replace', $menuRender, $html);
+}
+
+menuGen($menu);
+
+/*Задание 7*/
+echo "<br>Задание *7<br>";
+/*Вывести с помощью цикла for числа от 0 до 9,
+ НЕ используя тело цикла. Выглядеть это должно так:
+for(…){// здесь пусто}*/
+
+for ($i = 0; $i < 10; print $i, $i++) {
+}
+
+/*Задание 8*/
+echo "<br>Задание *8<br>";
+/*Повторить третье задание, но вывести на экран только города, начинающиеся с буквы «К»*/
+
+$map = [
+    'Moscow_obl' => ['Moscow', 'Khimki', 'Dedovsk'],
+    'Leningrad_obl' => ['Gatchina', 'Vyborg', 'Saint Petersburg'],
+    'Kaliningrad_obl' => ['Gusev', 'Sovetsk', 'Kaliningrad']
+];
+foreach ($map as $obl => $citys) {
+    echo "<br>$obl:<br>";
+    foreach ($citys as $city) {
+        foreach (str_split($city) as $letter) {
+            if ($letter == 'K') {
+                if ($city == end($citys)) {
+                    echo "$city.";
+                } else {
+                    echo "$city, ";
+                }
+            }
+            break;
+        }
+    }
+}
+/*Задание 9*/
+echo "<br>Задание *9<br>";
+/*Объединить две ранее написанные функции в одну, которая получает строку на русском языке,
+ производит транслитерацию и замену пробелов на подчеркивания
+(аналогичная задача решается при конструировании url-адресов на основе названия статьи в блогах).
  */
 
-function power($val, $pow)
+function transtLetterAndSpaces($str)
 {
-    if ($pow == 0) {
-        echo "1 <br>";
-    } else if ($pow == 1) {
-        echo "$val<br>";
-    } else {
-        $pow--;
-        $val *= $val;
-        power($val, $pow);
-    }
-}
-
-power(3, 3);
-
-/*ЗАДАНИЕ 7 доп*/
-echo "Задание 7* <br>";
-/*Написать функцию, которая вычисляет текущее время и возвращает его в формате с правильными склонениями,
-например: 22 часа 15 минут, 21 час 43 минуты.
-*/
-function getTime()
-{
-    $hours = date('h');
-    $min = date('i');
-    $sec = date('s');
-    $hourName = switchName('hour',getName($hours));
-    $minName = switchName('min',getName($min));
-    $secName = switchName('sec',getName($sec));
-    return "$hours час$hourName $min минут$minName $sec секунд$secName";
-}
-
-function getName($num)
-{
-    $lastNum = substr($num, -1);
-    if ($num >= 11 && $num <= 14) {
-        return 1;
-    } elseif ($lastNum >= 5 || $lastNum == 0) {
-        return 1;
-    } elseif ($lastNum >= 2 && $lastNum <= 4) {
-        return 2;
-    } elseif ($lastNum == 1) {
-        return 3;
-    }
-}
-
-function switchName($name, $num)
-{
-    if ($name == 'min' || $name == 'sec') {
-        switch ($num) {
-            case 1:
-                return '';
-            case 2:
-                return 'ы';
-            case 3:
-                return 'а';
-        }
-    } elseif ($name == 'hour') {
-        switch ($num) {
-            case 1:
-                return 'ов';
-            case 2:
-                return 'а';
-            case 3:
-                return '';
+    global $letters;
+    $newstr = '';
+    foreach (mb_str_split($str) as $letter) {
+        if (isset($letters[$letter])) {
+            $newstr .= $letters[$letter];
+        } elseif ($letter == ' '){
+            $newstr .= '_';
+        } else {
+            $newstr .= $letter;
         }
     }
-    echo 'daaa';
+    return $newstr;
 }
-
-echo getTime();
+echo transtLetterAndSpaces('как писать правильно?');
