@@ -223,7 +223,7 @@ function transtLetterAndSpaces($str)
     foreach (mb_str_split($str) as $letter) {
         if (isset($letters[$letter])) {
             $newstr .= $letters[$letter];
-        } elseif ($letter == ' '){
+        } elseif ($letter == ' ') {
             $newstr .= '_';
         } else {
             $newstr .= $letter;
@@ -231,4 +231,41 @@ function transtLetterAndSpaces($str)
     }
     return $newstr;
 }
+
 echo transtLetterAndSpaces('как писать правильно?');
+
+/*Задание 10*/
+echo "<br>Задание *10<br>";
+/*Обход деревьев с помощью рекурсии*/
+
+$tree = [
+    1 => [
+        2 => [
+            4 => [
+                8 => ['a', 'b', 'c'],
+                9 => ['a', 'b', 'c']
+            ],
+            5 => [
+                10 => ['a', 'b', 'c'],
+                11 => ['a', 'b', 'c']
+            ]
+        ],
+        3 => [
+            6 => ['a', 'b', 'c'],
+            7 => ['a', 'b', 'c']
+        ]
+    ]
+];
+
+function treeWalk($tree)
+{
+    foreach ($tree as $element) {
+        if (is_array($element)) {
+            treeWalk($element);
+        } else{
+            echo $element;
+        }
+    }
+
+}
+treeWalk($tree);
