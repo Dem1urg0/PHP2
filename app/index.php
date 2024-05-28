@@ -1,69 +1,176 @@
 <?php
-echo 'Задание 1';
-/*Создать галерею фотографий. Она должна состоять из одной страницы,
- на которой пользователь видит все картинки в уменьшенном виде.
- При клике на фотографию она должна открыться в браузере в новой вкладке.
-Размер картинок можно ограничивать с помощью свойства width.*/
+/*Задание 1*/
+/*Создать галерею изображений, состоящую из двух страниц.
+    a.Просмотр всех фотографий (уменьшенных копий).
+    b.Просмотр конкретной фотографии (изображение оригинального размера) по её ID в базе данных.
+*/
+/*Задание 2*/
+/*В базе данных создать таблицу, в которой будет храниться информация
+о картинках (адрес на сервере, размер, имя).
+*/
+/*Задание 3 доп*/
+/* На странице просмотра фотографии полного размера под картинкой должно
+быть указано число её просмотров.*/
+/*Задание 4 доп*/
+/*На странице просмотра галереи список фотографий должен быть отсортирован
+по популярности. Популярность – число кликов по фотографии.
+*/
+$link = mysqli_connect('mariadb', 'root', 'rootroot', 'dbphp');
+$sql = 'SELECT * FROM `imgs`';
+$result = mysqli_query($link, $sql);
 
-$html = file_get_contents('index.html');
+$imgs = [];
+$i = 0;
+while ($row = mysqli_fetch_assoc($result)) {
+    $imgs[$i] = $row;
+    $i++;
+}
+function sortParam($a,$b){
+    return $b['views'] - $a['views'];
+}
+usort($imgs,'sortParam');
 $block = '';
-$pics = explode('
-', file_get_contents('img/img.txt'));
-foreach ($pics as $pic) {
-    $block .= "<a target=\"_blank\" href=\"$pic\"><img class=\"img\" src=\"$pic\"></a>";
+foreach ($imgs as $img) {
+   $block .= "<a href=\"/img.php/?id={$img['id']}\"><img class=\"img\" src=\"img/{$img['file']}\"></a>";
 }
 
-echo str_replace('{{image_placeholder}}', $block, $html);
+?>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-5">
+    <style>
+        @import url(https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900,900italic);
 
-echo 'Задание 2';
-/*Строить фотогалерею, не указывая статичные ссылки к файлам,
- а просто передавая в функцию построения адрес папки с изображениями.
- Функция сама должна считать список файлов и построить фотогалерею со ссылками в ней.*/
-
-$pics = scandir('img');
-$block = '';
-$pics = explode('
-', file_get_contents('img/img.txt'));
-foreach ($pics as $pic) {
-    $block .= "<a target=\"_blank\" href=\"$pic\"><img class=\"img\" src=\"$pic\"></a>";
-}
-echo str_replace('{{image_placeholder}}', $block, $html);
-
-echo 'Задание 3*';
-/*[ для тех, кто изучал JS-1 ]
-При клике по миниатюре нужно показывать полноразмерное изображение в модальном окне*/
-
-$html = file_get_contents('js.html');
-$block = '';
-$pics = explode('
-', file_get_contents('img/img.txt'));
-foreach ($pics as $pic) {
-    $block .= "<img class=\"img\" src=\"$pic\">";
-    $block .= "";
-}
-echo str_replace('{{image_placeholder}}', $block, $html);
-
-echo 'Задание 4**';
-/*4.1 Создать логирование времени входа пользователся в log.txt*/
-/*4.2 В файле log1.txt максимум 10 строк,
- как только больше - последняя строка уходит в файл log2.txt,
- когда он заполниться то его последняя строка в file3.txt и тд*/
-
-function logWrite($num = 1, $stringToReplace = '')
-{
-    $filePath = __DIR__ . "/log/log$num.txt";
-    $logArr = explode(PHP_EOL, file_get_contents($filePath));
-        if ($stringToReplace !== '') {
-            array_unshift($logArr, $stringToReplace);
-        } else {
-            array_unshift($logArr, date('Y-m-d H:i:s'));
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        file_put_contents("log/log$num.txt", implode(PHP_EOL, $logArr));
-    if (count($logArr) === 10) {
-        $num++;
-        $stringToReplace = array_pop($logArr);
-        file_put_contents($filePath, implode(PHP_EOL, $logArr));
-        logWrite($num, $stringToReplace);
-    }
-}
-logWrite();
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: #ebebeb;
+            overflow-x: hidden;
+            text-align: center;
+        }
+
+        header {
+            width: 100%;
+            height: 50px;
+            background-color: #f44355;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        }
+
+        header > nav > div {
+            float: left;
+            width: 16.6666%;
+            height: 100%;
+            position: relative;
+        }
+
+        header > nav > div > a {
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            display: block;
+            line-height: 50px;
+            color: #fbfbfb;
+            transition: background-color 0.2s ease;
+            text-transform: uppercase;
+        }
+
+        header > nav > div:hover > a {
+            background-color: rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+
+        header > nav > div > div {
+            display: none;
+            overflow: hidden;
+            background-color: white;
+            min-width: 200%;
+            position: absolute;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+            padding: 10px;
+        }
+
+        header > nav > div:not(:first-of-type):not(:last-of-type) > div {
+            left: -50%;
+            border-radius: 0 0 3px 3px;
+        }
+
+        header > nav > div:first-of-type > div {
+            left: 0;
+            border-radius: 0 0 3px 0;
+        }
+
+        header > nav > div:last-of-type > div {
+            right: 0;
+            border-radius: 0 0 0 3px;
+        }
+
+        header > nav > div:hover > div {
+            display: block;
+        }
+
+        header > nav > div > div > a {
+            display: block;
+            float: left;
+            padding: 8px 10px;
+            width: 46%;
+            margin: 2%;
+            text-align: center;
+            background-color: #f44355;
+            color: #fbfbfb;
+            border-radius: 2px;
+            transition: background-color 0.2s ease;
+        }
+
+        header > nav > div > div > a:hover {
+            background-color: #212121;
+            cursor: pointer;
+        }
+
+        h1 {
+            margin-top: 100px;
+            font-weight: 100;
+        }
+
+        p {
+            color: #aaa;
+            font-weight: 300;
+        }
+
+        .pics {
+            display: grid;
+            grid-template-columns: repeat(4, 125px);
+            justify-content: center;
+        }
+
+        .img {
+            margin-top: 25px;
+            width: 100px;
+            height: 100px;
+            background-color: #b5ee82;
+        }
+
+        @media (max-width: 600px) {
+            header > nav > div > div > a {
+                margin: 5px 0;
+                width: 100%;
+            }
+
+            header > nav > div > a > span {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+<header>
+</header>
+<div class="pics">
+    <?php echo $block ?>
+</div>
+</body>
+</html>

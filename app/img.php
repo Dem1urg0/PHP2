@@ -1,3 +1,15 @@
+<?php
+$link = mysqli_connect('mariadb', 'root', 'rootroot', 'dbphp');
+$sql = "SELECT * FROM `imgs` WHERE `id` =" . $_GET['id'];
+$img = mysqli_fetch_assoc(mysqli_query($link, $sql));
+$block = "<img class=\"img\" src=\"/img/{$img['file']}\">";
+
+$views = $img['views'];
+$views++;
+$sqlUpd = 'UPDATE `imgs` SET `views` ='. $views . " WHERE `imgs`.`id` =" . $_GET['id'];
+mysqli_query($link, $sqlUpd);
+
+?>
 <html>
 <head>
     <meta http-equiv="content-type" content="text/html; charset=ISO-8859-5">
@@ -112,38 +124,26 @@
 
         .img {
             margin-top: 25px;
-            width: 100px;
-            height: 100px;
+            width: 600px;
+            height: 450px;
             background-color: #b5ee82;
         }
-        .gray{
+        .back{
             position: absolute;
-            display: none;
-            justify-content: center;
-            align-items: baseline;
-            width: 100%;
-            height: 100%;
-            background: rgba(50, 50, 50, 0.5);
-        }
-        .show{
-            display: flex;
-        }
-        .sliderImgs {
+            font-size: 40px;
+            text-decoration: none;
+            color: #f44355;
+            border: #f44355 5px solid;
             margin-top: 50px;
-            display: flex;
-            align-items: center;
-
+            margin-left: 5px;
+            padding-left: 5px;
+            padding-right: 5px;
         }
-
-        .slider_left, .slider_right {
-            width: 50px;
-            height: 50px;
+        .views{
+            position: absolute;
+            margin-top: 125px;
+            margin-left: 15px;
         }
-
-        .slider_img {
-
-        }
-
         @media (max-width: 600px) {
             header > nav > div > div > a {
                 margin: 5px 0;
@@ -160,23 +160,10 @@
 <header>
 </header>
 <div class="pics">
-    {{image_placeholder}}
-    <div class="gray">
-        <div class="sliderImgs">
-            <img src="img/1.jpg" class="slider_img">
-        </div>
-    </div>
+    <?php echo $block ?>
+    <a class="back" href="/">BACK</a>
+    <h2 class="views">VIEWS:<?php echo $views ?></h2>
 </div>
-<script>
-    let pics = document.querySelectorAll('.pics img');
-    pics.forEach(function(img) {
-        img.addEventListener('click', function (event) {
-            let sliderImg = document.querySelector('.slider_img');
-            sliderImg.src = event.target.src;
-            document.querySelector('.gray').classList.toggle('show');
-        });
-    });
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.3.0/lodash.js"></script>
 </body>
 </html>
+
