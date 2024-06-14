@@ -1,48 +1,25 @@
 <?php
+/*
+3. Добавить функционал отзывов в имеющийся у вас проект.
+*/
 $link = mysqli_connect('mariadb', 'root', 'rootroot', 'dbphp');
-$sql = "SELECT * FROM `imgs` WHERE `id` =" . $_GET['id'];
-$img = mysqli_fetch_assoc(mysqli_query($link, $sql));
-$block = "<img class=\"img\" src=\"/img/{$img['file']}\">";
+$sql = 'SELECT * FROM `imgs`';
+$result = mysqli_query($link, $sql);
 
-$views = $img['views'];
-$views++;
-$sqlUpd = 'UPDATE `imgs` SET `views` =' . $views . " WHERE `imgs`.`id` =" . $_GET['id'];
-mysqli_query($link, $sqlUpd);
-
-$sql_review = "INSERT INTO `reviews` (`img_id`, `id`, `stars`, `text`) VALUES ('2', NULL, '4', 'Хорошо')";
-
-
-$id = $_GET['id'];
-$sql_review = "SELECT `stars`, `text` FROM `reviews` WHERE `img_id` =" . "$id";
-$reviews = mysqli_fetch_all(mysqli_query($link, $sql_review));
-
-$block_review = '';
-$num = 1;
-foreach ($reviews as $review) {
-    $block_review .= "<div><h4>ОТЗЫВ:$num</h4><p>SCORE:" . $review[0] . "/5" . "</p><p>TEXT:" . $review[1] . "</p></div>";
-    $num++;
+$imgs = [];
+$i = 0;
+while ($row = mysqli_fetch_assoc($result)) {
+    $imgs[$i] = $row;
+    $i++;
 }
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST["stars"]) && isset($_POST["message"])) {
-        $stars = intval($_POST["stars"]);
-        $message = mysqli_real_escape_string($link, $_POST['message']);
-
-        $sqlUpd_review = "INSERT INTO `reviews` (`img_id`, `stars`, `text`) VALUES ($id, $stars, '$message')";
-        mysqli_query($link, $sqlUpd_review) or die(mysqli_error($link));
-    }
+function sortParam($a,$b){
+    return $b['views'] - $a['views'];
 }
-
-// средняя оценка
-
-$sql_score = 'SELECT `stars` FROM `reviews` WHERE `img_id` =' . $id;
-$score = mysqli_fetch_all(mysqli_query($link, $sql_score));
-$sum = 0;
-foreach ($score as $item) {
-    $sum += $item[0];
+usort($imgs,'sortParam');
+$block = '';
+foreach ($imgs as $img) {
+    $block .= "<a href=\"/img.php/?id={$img['id']}\"><img class=\"img\" src=\"img/{$img['file']}\"></a>";
 }
-if (count($score) == 0) {
-    $avg = 'нет';
-} else $avg = $sum / count($score);
 ?>
 <html>
 <head>
@@ -158,27 +135,9 @@ if (count($score) == 0) {
 
         .img {
             margin-top: 25px;
-            width: 600px;
-            height: 450px;
+            width: 100px;
+            height: 100px;
             background-color: #b5ee82;
-        }
-
-        .back {
-            position: absolute;
-            font-size: 40px;
-            text-decoration: none;
-            color: #f44355;
-            border: #f44355 5px solid;
-            margin-top: 50px;
-            margin-left: 5px;
-            padding-left: 5px;
-            padding-right: 5px;
-        }
-
-        .views {
-            position: absolute;
-            margin-top: 125px;
-            margin-left: 15px;
         }
 
         @media (max-width: 600px) {
@@ -198,29 +157,6 @@ if (count($score) == 0) {
 </header>
 <div class="pics">
     <?php echo $block ?>
-    <a class="back" href="/?page=3">BACK</a>
-    <h2 class="views">VIEWS:<?php echo $views ?></h2>
-    <h2 style="color: #f44355; position: absolute; margin-top: 170px; margin-left: 15px; width: 108px;">Средняя оценка: <?php echo $avg ?></h2>
-</div>
-<div class="do_review">
-
-</div>
-<div class="review">
-    <form action="" method="post">
-        <input type="hidden" value="<?= $id ?>">
-        <label for="message">Оставьте отзыв:</label><br>
-        <textarea name="message" id="message" cols="30" rows="10"></textarea>
-        <select name="stars">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-        </select>
-        <input type="submit">
-    </form>
-    <?php echo $block_review ?>
 </div>
 </body>
 </html>
-
