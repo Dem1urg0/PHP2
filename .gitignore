@@ -6,3 +6,6 @@
 /databases/
 /databases/mariadb/mysql/
 /databases/mariadb/performance_schema/
+/composer.lock
+/composer.json
+/app/vendor/
