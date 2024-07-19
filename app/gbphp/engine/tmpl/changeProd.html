@@ -1,0 +1,152 @@
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+    }
+
+    .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px;
+        background-color: #fff;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .search input {
+        padding: 8px;
+        width: 200px;
+        margin-right: 10px;
+    }
+
+    .search button {
+        padding: 8px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    .products-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 20px;
+    }
+
+    .product-form {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        width: 400px;
+        margin: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        position: relative;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+    }
+
+    input[type="text"], input[type="number"], input[type="file"] {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .button-group {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .delete-btn, .change-btn {
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        color: white;
+    }
+
+    .delete-btn {
+        background-color: #ff4444;
+    }
+
+    .change-btn {
+        background-color: #4CAF50;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 200px;
+        background-color: #ddd;
+        margin-bottom: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #666;
+    }
+
+    .search {
+        display: flex;
+    }
+
+    .deleteForm {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+    }
+    .create {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        background-color: #ddd;
+        border-bottom: 1px solid #ddd;
+
+    }
+</style>
+<div class="head">
+    <h1>Products</h1>
+    <form class="search">
+        <input type="hidden" name="p" value="changeProd">
+        <input type="text" placeholder="Search products..." name="name">
+        <button type="submit">SEARCH</button>
+    </form>
+</div>
+<div class="create">
+    <form class='product-form'>
+        <div class='form-group'>
+            <label for='image'>Image:</label>
+            <input type='file' name='image' accept='image/*'>
+        </div>
+        <div class='form-group'>
+            <label for='name'>NAME:</label>
+            <input type='text' name='name'>
+        </div>
+        <div class='form-group'>
+            <label for='price'>Price:</label>
+            <input type='number' name='price'>
+        </div>
+        <div class='form-group'>
+            <label for='type'>Type:</label>
+            <input type='text' name='type'>
+        </div>
+        <div class='button-group'>
+            <input type='hidden' name='id'>
+            <input type='hidden' name='a' value='create'>
+            <input type='hidden' name='p' value='changeProd'>
+            <button class='change-btn' type='submit'>Create</button>
+        </div>
+    </form>
+</div>
+{{PRODUCTS}}

@@ -134,6 +134,7 @@
             margin-top: 125px;
             margin-left: 15px;
         }
+
         .add {
             position: absolute;
             margin-top: 250px;
@@ -142,6 +143,7 @@
             font-size: 30px;
             margin-left: 10px;
         }
+
         @media (max-width: 600px) {
             header > nav > div > div > a {
                 margin: 5px 0;
@@ -153,6 +155,7 @@
             }
         }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <header>
@@ -162,10 +165,10 @@
     {{ADD}}
     <a class="back" href="/?p=goods">BACK</a>
     <h2 class="views">VIEWS:{{VIEWS}}</h2>
-    <h2 style="color: #f44355; position: absolute; margin-top: 170px; margin-left: 15px; width: 108px;">Средняя оценка: {{AVG}}</h2>
+    <h2 style="color: #f44355; position: absolute; margin-top: 170px; margin-left: 15px; width: 108px;">Средняя оценка:
+        {{AVG}}</h2>
 </div>
 <div class="do_review">
-
 </div>
 <div class="review">
     <form action="" method="post">
@@ -184,4 +187,15 @@
     {{REVIEW}}
 </div>
 </body>
+<script>
+    function addButton(id) {
+        jQuery.ajax({
+            type: "POST",
+            url: "?p=cart&a=Ajax&type=add&id=" + id,
+            success: function (date) {
+                console.log(date);
+            }
+        })
+    }
+</script>
 </html>

@@ -6,29 +6,23 @@
 
 function indexAction()
 {
+    session_start();
+    if (empty($_SESSION['user']['id'])) {
+        header('Location: /?p=login');
+    }
     $productsHtml = '';
-    foreach ($_SESSION['goods'] as $good){
+    foreach ($_SESSION['goods'] as $good) {
         $totalPrice = $good['price'] * $good['count'];
         $productsHtml .= "<div class ='cart-item'>
             <h3>{$good['name']}</h3>
             <p>Price per item: {$good['price']} </p>
+            <p>Count: {$good['count']} </p>
             <p>Total price: {$totalPrice} </p>
         </div>
         <div>
         <div class ='change'>
-            <form>
-                <input type='hidden' name='a' value='change'>
-                <input type='hidden' name='p' value='cart'>
-                <input type='hidden' name='id' value='{$good['id']}'>
-                <input  type='text' name='count' value='{$good['count']}'>
-                <button type='submit'>Change</button>
-            </form> 
-            <form>
-                <input type='hidden' name='a' value='delete'>
-                <input type='hidden' name='p' value='cart'>
-                <input type='hidden' name='id' value='{$good['id']}'>
-                <button class='delete'>Delete</button>
-            </form>
+                        <button class='cart-button' type='submit' onclick='buttonGoods(`{$good["id"]}`,`dec`)'>-</button>
+                <button class='cart-button' type='submit' onclick='buttonGoods(`{$good["id"]}`,`add`)'>+</button>
             </div>
         </div>
         ";
@@ -36,9 +30,27 @@ function indexAction()
     $html = file_get_contents(dirname(__DIR__) . '/tmpl/cart.html');
     return str_replace('{{PRODUCTS}}', $productsHtml, $html);
 }
-function addAction()
+
+function AjaxAction()
+{
+    session_start();
+    $type = $_GET['type'];
+    switch ($type) {
+        case 'add':
+            add();
+            break;
+        case 'dec':
+            dec();
+            break;
+    }
+}
+
+function add()
 {
     $id = $_GET['id'];
+    if (empty($id) || !is_numeric($id)) {
+        return false;
+    }
     $sql = 'SELECT name, price FROM products WHERE id = ' . $id;
     $product = mysqli_fetch_assoc(mysqli_query(connect(), $sql));
     if (!isset($_SESSION['goods'])) {
@@ -50,46 +62,80 @@ function addAction()
             'count' => 1,
         ];
         array_push($_SESSION['goods'], $good);
+        return true;
     } else {
-        $found = false;
         foreach ($_SESSION['goods'] as &$good) {
             if ($good['id'] == $id) {
                 $good['count']++;
-                $found = true;
-                header('Location:' . $_SERVER['HTTP_REFERER']);
+                return true;
             }
         }
-        if (!$found) {
-            $_SESSION['goods'][] = [
-                'id' => $id,
-                'name' => $product['name'],
-                'price' => $product['price'],
-                'count' => 1,
-            ];
-        }
+        $_SESSION['goods'][] = [
+            'id' => $id,
+            'name' => $product['name'],
+            'price' => $product['price'],
+            'count' => 1,
+        ];
+        return true;
     }
-    header('Location:' . $_SERVER['HTTP_REFERER']);
 }
 
-function changeAction()
+function dec()
 {
     $id = $_GET['id'];
-    $count = $_GET['count'];
     foreach ($_SESSION['goods'] as &$good) {
         if ($good['id'] == $id) {
-            $good['count'] = $count;
-            header('Location:' . $_SERVER['HTTP_REFERER']);
+            if ($good['count'] > 1) {
+                $good['count']--;
+                return true;
+            } else {
+                delete();
+                return true;
+            }
         }
     }
+    return false;
 }
 
-function deleteAction()
+function delete()
 {
     $id = $_GET['id'];
     foreach ($_SESSION['goods'] as $key => $good) {
         if ($good['id'] == $id) {
             unset($_SESSION['goods'][$key]);
-            header('Location:' . $_SERVER['HTTP_REFERER']);
+            return true;
         }
     }
+    return false;
+}
+
+function OrderAction()
+{
+    session_start();
+    $conn = connect();
+    $order = [
+        'user_id' => $_SESSION['user']['id'],
+        'phone' => mysqli_real_escape_string($conn, $_GET['phone']),
+        'email' => mysqli_real_escape_string($conn, $_GET['email']),
+        'address' => mysqli_real_escape_string($conn, $_GET['address']),
+        'status' => 'new',
+    ];
+    $sqlOrder = "INSERT INTO `orders` (`user_id`, `address`, `tel`, `email`, `status`) VALUES 
+                 ('{$order['user_id']}', '{$order['address']}', '{$order['phone']}', '{$order['email']}', '{$order['status']}')";
+
+    if (!mysqli_query($conn, $sqlOrder)) {
+        die("Ошибка при добавлении заказа: " . mysqli_error($conn));
+    }
+
+    $order_id = mysqli_insert_id($conn);
+    foreach ($_SESSION['goods'] as $good) {
+        $sql = "INSERT INTO `order_list` (`order_id`, `prod_id`, `count`) VALUES 
+                ('$order_id', '{$good['id']}', '{$good['count']}')";
+        if (!mysqli_query($conn, $sql)) {
+            die("Ошибка при добавлении товара в заказ: " . mysqli_error($conn));
+        }
+    }
+    mysqli_close($conn);
+    $_SESSION['goods'] = [];
+    header('Location: /?p=cart');
 }

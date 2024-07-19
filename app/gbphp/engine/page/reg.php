@@ -4,8 +4,9 @@
 */
 function indexAction()
 {
-    if ($_GET['login'] != NUll && $_GET['pass'] != NULL) {
+    if (!empty($_GET['login']) && !empty($_GET['pass'])) {
         header("Location:/?p=login&a=aut&login={$_GET['login']}&pass={$_GET['pass']}&mth=reg");
+        exit;
     }
     $html = file_get_contents(dirname(__DIR__) . '/tmpl/reg.html');
     if ($_GET['le'] == 'true') {

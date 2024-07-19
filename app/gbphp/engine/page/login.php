@@ -39,11 +39,12 @@ function login()
 {
     if ($_GET['pass'] != NULL && preg_match("#^[aA-zZ0-9]+$#", $_GET['pass'])) {
         $pass = mysqli_real_escape_string(connect(), md5($_GET['pass']));
-        $sql = "SELECT id FROM users WHERE password = '$pass'";
+        $sql = "SELECT id, role FROM users WHERE password = '$pass'";
         $foundUser = (mysqli_fetch_assoc(mysqli_query(connect(), $sql)));
         if ($foundUser) {
             session_start();
             $_SESSION['user']['id'] = $foundUser['id'];
+            $_SESSION['user']['admin'] = $foundUser['role'];
             header('Location: /?p=user&a=one');
             exit;
         }
@@ -58,8 +59,9 @@ function reg()
         $login = mysqli_real_escape_string(connect(), $_GET['login']);
         $sql = "INSERT INTO `users` (`id`, `role`, `password`, `login`, `name`) VALUES (NULL, '0', '$pass', '$login', 'NO')";
         mysqli_query(connect(), $sql);
-        header('Location:/?p=reg&com=true');
+        header('Location:/?p=login');
+        exit;
     }
     header('Location:/?p=reg&pe=true');
-
+    exit;
 }

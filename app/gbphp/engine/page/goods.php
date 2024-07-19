@@ -1,6 +1,10 @@
 <?php
 function indexAction()
 {
+    session_start();
+    if(empty($_SESSION['user'])){
+        header('Location: /?p=login');
+    }
     $sql = 'SELECT * FROM `products`';
     $result = mysqli_query(connect(), $sql);
 
@@ -11,10 +15,13 @@ function indexAction()
         $i++;
     }
     $block = '';
+
     foreach ($products as $product) {
+        $discount = discount($product['type']);
+        $price = $product['price'] - $discount;
         $block .= "<div>
 <a href=\"?p=goods&a=one&id={$product['id']}\"><img class=\"img\" src=\"img/{$product['img']}\"></a>
-<div style='display: flex; justify-content: space-between'><p>" . $product['name'] . '</p>' . '<p>Price:' . $product['price'] . '</p></div></div>';
+<div style='display: flex; justify-content: space-between'><p>" . $product['name'] . '</p>' . "<p>Disc: $discount%</p>" . '<p>Price:' . $price . '</p></div></div>';
     }
     $html = file_get_contents(dirname(__DIR__) . '/tmpl/catalog.html');
     return str_replace('{{BLOCK}}', $block, $html);
@@ -22,7 +29,11 @@ function indexAction()
 
 function oneAction()
 {
-    $sql = "SELECT * FROM `imgs` WHERE `id` =" . $_GET['id'];
+    session_start();
+    if(empty($_SESSION['user'])){
+        header('Location: /?p=login');
+    }
+    $sql = "SELECT * FROM `products` WHERE `id` =" . $_GET['id'];
     $img = mysqli_fetch_assoc(mysqli_query(connect(), $sql));
     $block = "<img class=\"img\" src=\"/img/{$img['file']}\">";
 
@@ -61,13 +72,18 @@ function oneAction()
     if (count($score) == 0) {
         $avg = 'нет';
     } else $avg = $sum / count($score);
+
     $html = file_get_contents(dirname(__DIR__) . '/tmpl/product.html');
-    session_start();
-    $addBlock = '<a class="add" href="/?p=cart&a=add&id=' . $id . '">ADD TO CART</a>';
-    return str_replace('{{ADD}}', $addBlock,
-        str_replace('{{REVIEW}}', $block_review,
-            str_replace('{{AVG}}', $avg,
-                str_replace('{{BLOCK}}', $block,
-                    str_replace('{{VIEWS}}', $views, $html)))));
+    $addBlock = '<button class="add" onclick="addButton(' . $id . ')">ADD TO CART</button>';
+    $placeholders = ['{{ADD}}', '{{REVIEW}}', '{{AVG}}', '{{BLOCK}}', '{{VIEWS}}'];
+    $replacements = [$addBlock, $block_review, $avg, $block, $views];
+    return str_replace($placeholders, $replacements, $html);
+}
+
+function discount($type)
+{
+    $sql = $sql = "SELECT `procent` FROM discounts WHERE `type` = '$type'";
+    $result = mysqli_fetch_assoc(mysqli_query(connect(), $sql));
+    return $result['procent'];
 }
 

@@ -26,7 +26,7 @@
             width: 150px;
         }
 
-        button {
+        .cart-button {
             background-color: #28a745;
             color: white;
             border: none;
@@ -36,7 +36,7 @@
             height: 30px;
         }
 
-        button:hover {
+        .cart-button:hover {
             background-color: #218838;
         }
 
@@ -89,12 +89,115 @@
             padding: 10px;
             border-radius: 5px;
         }
+        #order-form {
+            margin-top: 20px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 10px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .form-group input {
+            width: calc(100% - 10px);
+            padding: 5px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        #submit-order {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            height: 30px;
+            width: 100%;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+        }
+
+        #submit-order:hover {
+            background-color: #218838;
+        }
     </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 <h1>Shopping Cart</h1>
 <div id="cart">
     {{PRODUCTS}}
 </div>
+<h2>Set Order</h2>
+<form id="order-form">
+    <div class="form-group">
+        <label for="phone">Phone:</label>
+        <input type="tel" name="phone" required>
+    </div>
+    <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" name="email" required>
+    </div>
+    <div class="form-group">
+        <label for="address">Address:</label>
+        <input type="text" name="address" required>
+    </div>
+    <button class="cart-button" type="submit">Submit Order</button>
+    <input type="hidden" name="p" value="cart">
+    <input type="hidden" name="a" value="Order">
+</form>
 </body>
+<script>
+    function buttonGoods(id, type) {
+        switch (type) {
+            case 'add': {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "?p=cart&a=Ajax&type=add&id=" + id,
+                })
+                setTimeout(function() {
+                    window.location.reload();
+                }, 100);
+                break;
+            }
+            case 'dec': {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "?p=cart&a=Ajax&type=dec&id=" + id,
+                    success: function (date) {
+                        console.log(date);
+                    }
+                })
+                setTimeout(function() {
+                    window.location.reload();
+                }, 100);
+                break;
+            }
+            case 'del': {
+                jQuery.ajax({
+                    type: "POST",
+                    url: "?p=cart&a=Ajax&type=del&id=" + id,
+                    success: function (date) {
+                        console.log(date);
+                    }
+                })
+                setTimeout(function() {
+                    window.location.reload();
+                }, 100);
+                break;
+            }
+        }
+    }
+</script>
 </html>
