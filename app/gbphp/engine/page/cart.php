@@ -51,14 +51,21 @@ function add()
     if (empty($id) || !is_numeric($id)) {
         return false;
     }
-    $sql = 'SELECT name, price FROM products WHERE id = ' . $id;
+    $sql = 'SELECT name, price, type FROM products WHERE id = ' . $id;
     $product = mysqli_fetch_assoc(mysqli_query(connect(), $sql));
+    $sql = "SELECT `procent` FROM discounts WHERE `type` = '{$product['type']}'";
+    $discount = mysqli_fetch_assoc(mysqli_query(connect(), $sql))['procent'];
+    if (!empty($discount)){
+        $price = $product['price'] - ($product['price'] * $discount / 100);
+    } else{
+        $price = $product['price'];
+    }
     if (!isset($_SESSION['goods'])) {
         $_SESSION['goods'] = [];
         $good = [
             'id' => $id,
             'name' => $product['name'],
-            'price' => $product['price'],
+            'price' => $price,
             'count' => 1,
         ];
         array_push($_SESSION['goods'], $good);
@@ -73,7 +80,7 @@ function add()
         $_SESSION['goods'][] = [
             'id' => $id,
             'name' => $product['name'],
-            'price' => $product['price'],
+            'price' => $price,
             'count' => 1,
         ];
         return true;
