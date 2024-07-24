@@ -9,4 +9,4 @@
 /composer.lock
 /composer.json
 /app/vendor/
-/databases/mariadb/
+databases/
