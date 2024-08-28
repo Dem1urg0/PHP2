@@ -7,6 +7,7 @@ class User extends Model
     public $name;
     public $password;
     public $login;
+    public $role;
 
     /**
      * Возвращает имя таблицы в базе данных
