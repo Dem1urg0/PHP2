@@ -6,7 +6,7 @@ trait TSingleton
 {
     protected function __construct() {}
     protected function __clone() {}
-    protected function __wakeup() {}
+    public function __wakeup() {}
 
     private static $items;
 

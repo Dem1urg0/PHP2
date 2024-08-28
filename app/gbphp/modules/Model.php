@@ -27,22 +27,20 @@ abstract class Model
 
     public function getOne($id)
     {
+        $this->id = $id;
         if (!$this->checkFillParams(['id'])) {
             return 'Не все параметры заполнены';
         }
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM {$tableName} WHERE id = :id";
-        return $this->bd->find($sql, [':id' => $id]);
+        return $this->bd->queryObject($sql, static::class, [':id' => $id]);
     }
 
     public function getAll()
     {
-        if (!$this->checkFillParams()) {
-            return 'Не все параметры заполнены';
-        }
         $tableName = $this->getTableName();
         $sql = "SELECT * FROM {$tableName}";
-        return $this->bd->findAll($sql);
+        return $this->bd->queryObjects($sql, static::class);
     }
 
     public function delete()
@@ -52,10 +50,10 @@ abstract class Model
             return 'Не все параметры заполнены';
         }
         $sql = "DELETE FROM `goods` WHERE id = :id";
-        $this->bd->exec($sql,[':id' => $this->id]);
+        $this->bd->exec($sql, [':id' => $this->id]);
     }
 
-    public function insert()
+    private function insert()
     {
         if (!$this->checkFillParams(['name', 'price'])) {
             return 'Не все параметры заполнены';
@@ -65,9 +63,9 @@ abstract class Model
         $this->bd->exec($sql, $this->getParams('params'));
     }
 
-    public function update()
+    private function update()
     {
-        if(!$this->getParams('equality', ['id'])){
+        if (!$this->getParams('equality', ['id'])) {
             return 'Не все параметры заполнены';
         }
         $tableName = $this->getTableName();
@@ -142,6 +140,7 @@ abstract class Model
             return false;
         }
     }
+
     public function checkFillParams($params = ['id', 'name', 'price'])
     {
         foreach ($params as $param) {
