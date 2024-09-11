@@ -1,3 +1,4 @@
+{% include 'layouts/main.php.twig' %}
 <style>
     .orders-container {
         background-color: white;
@@ -37,6 +38,7 @@
     .product p {
         margin: 0;
     }
+
     .sad a {
         text-decoration: none;
         color: white;
@@ -47,10 +49,10 @@
     }
 </style>
 <div class="sad">
-        <h1><?= $user->login ?></h1>
-        <h2><?= $user->name ?></h2>
-        <a href="?c=user&a=all">Назад</a>
+    <h1>{{ user.login }}</h1>
+    <h2>{{ user.name }}</h2>
+    <a href="?c=user&a=all">Назад</a>
 </div>
-<script>
-    var a = '<?= $title?>';
-</script>
+</div>
+</body>
+</html>

@@ -1,4 +1,4 @@
-<style>
+{% include 'layouts/main.php.twig'%}<style>
     .content_block img {
         width: 150px;
         height: 150px;
@@ -25,14 +25,17 @@
 <div class="content_block">
     <div class="content_block_params">
         <div>
-            <h1><?= $good->name ?></h1>
-            <p><?= $good->price ?></p>
-            <p><?= $good->type ?></p>
+            <h1>{{ good.name }}</h1>
+            <p>{{ good.price }}</p>
+            <p>{{ good.type }}</p>
         </div>
-        <img src="<?= $good->img ?>">
+        <img src="{{ good.img }}">
     </div>
     <div class="content_block_info">
-    <p><?= $good->info ?></p>
+    <p>{{ good.info }}</p>
     <a href="?c=good&a=all">Назад</a>
     </div>
 </div>
+</div>
+</body>
+</html>

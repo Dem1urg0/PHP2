@@ -1,20 +1,30 @@
 <?php
 
-use \App\modules\Good;
+use App\modules\Good;
 
 session_start();
 
-include dirname(__DIR__) . '/services/Autoload.php';
-spl_autoload_register([new Autoload(), 'loadClass']);
+// Подключаем автозагрузчик Composer
+require_once dirname(dirname(__DIR__)) . '/vendor/autoload.php';
 
-$controllerName = $_GET['c'] ?: 'user';
+use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
 
-$actionName = '';
-if (!empty($_GET['a'])) {
-    $actionName = $_GET['a'];
-}
-$constrollerClass = 'App\\controllers\\' . ucfirst($controllerName) . 'Controller';
-if (class_exists($constrollerClass)){
-    $controller = new $constrollerClass;
-    echo $controller->run($actionName);
+// Настройка Twig
+$loader = new FilesystemLoader(dirname(__DIR__) . '/views');
+$twig = new Environment($loader);
+
+$controllerName = $_GET['c'] ?? 'user';
+$actionName = $_GET['a'] ?? '';
+
+$controllerClass = 'App\\controllers\\' . ucfirst($controllerName) . 'Controller';
+
+if (class_exists($controllerClass)) {
+    if($actionName == 'all'){
+        $template = $controllerName . "s.php.twig";
+    } else {
+        $template = $controllerName . ".php.twig";
+    }
+    $controller = new $controllerClass();
+    echo $twig->render($template,$controller->run($actionName));
 }

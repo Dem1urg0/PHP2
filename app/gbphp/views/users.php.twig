@@ -1,3 +1,4 @@
+{% include 'layouts/main.php.twig'%}
 <style>
 
     .sad h1 {
@@ -12,12 +13,10 @@
     }
 </style>
 <div class="sad">
-    <?php
-    /**@var \App\modules\User [] $users */
-    foreach ($users as $user) : ?>
-        <h1><a href="?c=user&a=one&id=<?=$user->id?>"><?= $user->login ?></a></h1>
-    <?php endforeach;?>
+    {% for user in users %}
+        <h1><a href="?c=user&a=one&id={{ user.id }}">{{ user.login }}</a></h1>
+    {% endfor %}
 </div>
-<script>
-    var a = {};
-</script>
+</div>
+</body>
+</html>

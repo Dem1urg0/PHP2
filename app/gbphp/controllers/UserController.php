@@ -10,7 +10,7 @@ class UserController extends ModelController
     public function allAction()
     {
         $users = (new User())->getAll();
-        return $this->render('users', ['users' => $users]);
+        return ['users' => $users];
     }
 
     public function oneAction()
@@ -18,9 +18,9 @@ class UserController extends ModelController
         $oUser = new User;
         $user = $oUser->getOne($_GET['id']);
 
-        return $this->render('user', [
+        return [
             'user' => $user,
             'title' => 'Name'
-        ]);
+        ];
     }
 }

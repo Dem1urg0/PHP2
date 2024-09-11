@@ -18,17 +18,4 @@ abstract class ModelController
         header('Location: /');
         exit();
     }
-    public function render($template, $params = [])
-    {
-        $content = $this->renderTmpl($template, $params);
-        return $this->renderTmpl('layouts/main', ['content' => $content]);
-    }
-
-    public function renderTmpl($template, $params = [])
-    {
-        ob_start();
-        extract($params);
-        include dirname(__DIR__) . '/views/' . $template . '.php';
-        return ob_get_clean();
-    }
 }

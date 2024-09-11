@@ -9,7 +9,7 @@ class GoodController extends ModelController
     public function allAction()
     {
         $goods = (new Good())->getAll();
-        return $this->render('goods', ['goods' => $goods]);
+        return ['goods' => $goods];
     }
 
     public function oneAction()
@@ -17,8 +17,6 @@ class GoodController extends ModelController
         $oGood = new Good;
         $good = $oGood->getOne($_GET['id']);
 
-        return $this->render('good', [
-            'good' => $good,
-        ]);
+        return ['good' => $good,];
     }
 }
