@@ -1,5 +1,5 @@
-{% include 'layouts/main.php.twig'%}
-<style>
+{% extends 'layouts/main.php.twig'%}
+{% block style %}
     .content_block{
         display: flex;
         justify-content: space-between;
@@ -14,16 +14,15 @@
         text-decoration: none;
         color: black;
     }
-</style>
+{% endblock %}
+{% block content %}
 {% for good in goods %}
     <div class="content_block">
         <div>
-            <a href="?c=good&a=one&id={{ good.id }}"><h1>{{ good.name }}</h1></a>
+            <a href="/good/one?id={{ good.id }}"><h1>{{ good.name }}</h1></a>
             <p>{{ good.price }}</p>
         </div>
-        <a href="?c=good&a=one&id={{ good.id }}"><img src="{{ good.img }}"></a>
+        <a href="/good/one?id={{ good.id }}"><img src="{{ good.img }}"></a>
     </div>
 {% endfor %}
-</div>
-</body>
-</html>
+{% endblock %}

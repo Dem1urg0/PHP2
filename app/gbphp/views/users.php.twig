@@ -1,6 +1,5 @@
-{% include 'layouts/main.php.twig'%}
-<style>
-
+{% extends 'layouts/main.php.twig'%}
+{% block style %}
     .sad h1 {
         font-size: 24px;
         margin-bottom: 10px;
@@ -11,12 +10,11 @@
         text-decoration: none;
         color: #000;
     }
-</style>
+{% endblock %}
+{% block content %}
 <div class="sad">
     {% for user in users %}
-        <h1><a href="?c=user&a=one&id={{ user.id }}">{{ user.login }}</a></h1>
+        <h1><a href="/user/one?id={{ user.id }}">{{ user.login }}</a></h1>
     {% endfor %}
 </div>
-</div>
-</body>
-</html>
+{% endblock %}

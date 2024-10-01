@@ -1,4 +1,5 @@
-{% include 'layouts/main.php.twig'%}<style>
+{% extends 'layouts/main.php.twig'%}
+{% block style %}
     .content_block img {
         width: 150px;
         height: 150px;
@@ -20,8 +21,8 @@
         border-radius: 5px;
         transition: background-color 0.3s ease;
     }
-
-</style>
+{% endblock %}
+{% block content %}
 <div class="content_block">
     <div class="content_block_params">
         <div>
@@ -33,9 +34,8 @@
     </div>
     <div class="content_block_info">
     <p>{{ good.info }}</p>
-    <a href="?c=good&a=all">Назад</a>
+    <a href="/good/all">Назад</a>
+        <a href="/cart/add/?id={{ good.id }}">Купить</a>
     </div>
 </div>
-</div>
-</body>
-</html>
+{% endblock %}

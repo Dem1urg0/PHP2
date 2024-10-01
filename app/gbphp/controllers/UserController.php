@@ -2,21 +2,28 @@
 
 namespace App\controllers;
 
-use App\modules\User;
+use App\modules\Repositories\RUser;
 
 class UserController extends ModelController
 {
+    protected $oUser;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->oUser = new RUser();
+    }
 
     public function allAction()
     {
-        $users = (new User())->getAll();
+        $users = $this->oUser->getAll();
         return ['users' => $users];
     }
 
     public function oneAction()
     {
-        $oUser = new User;
-        $user = $oUser->getOne($_GET['id']);
+        $id = $this->getGRequest('id');
+        $user = $this->oUser->getOne($id);
 
         return [
             'user' => $user,

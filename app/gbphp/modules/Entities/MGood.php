@@ -1,9 +1,10 @@
 <?php
-namespace App\modules;
 
-class Good extends Model
+namespace App\modules\Entities;
+
+class MGood extends Model
 {
-    public $id; //в сущность
+    public $id;
     public $name;
     public $price;
     public $type;
@@ -14,7 +15,7 @@ class Good extends Model
      * Возвращает имя таблицы в базе данных
      * @return string
      */
-    public function getTableName(): string //в реп
+    public function getTableName(): string
     {
         return 'goods';
     }

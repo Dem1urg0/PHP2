@@ -49,7 +49,7 @@ abstract class Model
         if (!$this->checkFillParams(['id'])) {
             return 'Не все параметры заполнены';
         }
-        $sql = "DELETE FROM `goods` WHERE id = :id";
+        $sql = "DELETE FROM {$tableName} WHERE id = :id";
         $this->bd->exec($sql, [':id' => $this->id]);
     }
 

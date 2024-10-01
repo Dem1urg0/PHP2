@@ -2,21 +2,27 @@
 
 namespace App\controllers;
 
-use App\modules\Good;
+use App\modules\Repositories\RGood;
 
 class GoodController extends ModelController
 {
+    protected $oGood;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->oGood = new RGood();
+    }
     public function allAction()
     {
-        $goods = (new Good())->getAll();
+        $goods = (($this->oGood)->getAll());
         return ['goods' => $goods];
     }
 
     public function oneAction()
     {
-        $oGood = new Good;
-        $good = $oGood->getOne($_GET['id']);
-
-        return ['good' => $good,];
+        $id = $this->getGRequest('id');
+        $good = $this->oGood->getOne($id);
+        return ['good' => $good];
     }
 }

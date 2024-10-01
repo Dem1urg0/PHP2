@@ -49,13 +49,20 @@
             margin-top: 20px;
             width: 80%;
         }
+        {% block style %}
+        {% endblock %}
     </style>
 </head>
 <body>
 <ul>
-    <li><a href="?c=user&a=all">Пользователи</a></li>
-    <li><a href="?c=good&a=all">Товары</a></li>
+    <li><a href="/user/all">Пользователи</a></li>
+    <li><a href="/good/all">Товары</a></li>
+    <li><a href="/cart/">Корзина</a></li>
 </ul>
 
 <div class="content">
-
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>

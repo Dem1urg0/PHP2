@@ -1,9 +1,10 @@
 <?php
-namespace App\modules;
 
-class User extends Model
+namespace App\modules\Entities;
+
+class MUser extends Model
 {
-    public $id; //сущ
+    public $id;
     public $name;
     public $password;
     public $login;
@@ -13,7 +14,7 @@ class User extends Model
      * Возвращает имя таблицы в базе данных
      * @return string
      */
-    public function getTableName(): string //реп
+    public function getTableName(): string
     {
         return 'users';
     }

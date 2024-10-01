@@ -3,7 +3,7 @@ namespace App\modules;
 
 class Order extends Model
 {
-    public $id;
+    public $id; //сущ
     public $user_id;
     public $address;
     public $phone;
@@ -14,7 +14,7 @@ class Order extends Model
      * Возвращает имя таблицы в базе данных
      * @return string
      */
-    public function getTableName(): string
+    public function getTableName(): string //реп
     {
         return 'order';
     }
