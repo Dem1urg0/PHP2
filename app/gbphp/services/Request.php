@@ -12,6 +12,9 @@ class Request
 
     public function __construct()
     {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
         $this->requestString = $_SERVER['REQUEST_URI'];
         $this->params = [
             'get' => $_GET,
@@ -31,6 +34,9 @@ class Request
 
     public function get($params = '')
     {
+        if (!$_SERVER['REQUEST_METHOD'] == 'GET') {
+            return array();
+        }
         if (empty($params)) {
             return $this->params['get'];
         }
@@ -38,7 +44,6 @@ class Request
         if (!empty($this->params['get'][$params])) {
             return $this->params['get'][$params];
         }
-
         return array();
     }
 
@@ -51,14 +56,46 @@ class Request
     {
         return $this->controllerName;
     }
+
     public function post($params = '')
     {
+        if (!$_SERVER['REQUEST_METHOD'] == 'POST') {
+            return array();
+        }
         if (empty($params)) {
             return $this->params['post'];
         }
-        if (!empty($this->params[$params])) {
-            return $this->params[$params];
+        if (!empty($this->params['post'][$params])) {
+            return $this->params['post'][$params];
         }
         return array();
+    }
+
+    public function sessionSet($key, $value)
+    {
+        $_SESSION[$key] = $value;
+    }
+
+    public function sessionGet($key)
+    {
+        if(isset($_SESSION[$key])){
+            return $_SESSION[$key];
+        } else return array();
+    }
+    public function sessionDelete($key)
+    {
+        unset($_SESSION[$key]);
+    }
+    public function sessionAddToArr($key, $value)
+    {
+        if(!isset($_SESSION[$key]) || !is_array($_SESSION[$key])){ // todo?
+            $_SESSION[$key] = [];
+        }
+        $_SESSION[$key][] = $value;
+    }
+    public function isPost(){
+        if ($_SERVER['REQUEST_METHOD'] == 'POST'){
+            return true;
+        } else return false;
     }
 }

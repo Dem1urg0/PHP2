@@ -1,0 +1,66 @@
+{% extends 'layouts/main.twig' %}
+{% block style %}
+    .content_block img {
+    width: 150px;
+    height: 150px;
+    }
+
+    .content_block_params a {
+    text-decoration: none;
+    color: black;
+    }
+    .content_block_params{
+    display: flex;
+    justify-content: space-between;
+    }
+    .content_block_info a, .content_block_info button{
+    text-decoration: none;
+    color: white;
+    background-color: #df1d4a;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    border: none;
+    box-sizing: border-box;
+    font-size: 15px;
+    }
+    .content_block_info_buttons{
+    display:flex;
+    justify-content:space-between;
+    }
+{% endblock %}
+{% block content %}
+    <div class="content_block">
+        <div class="content_block_params">
+            <div>
+                <h1>{{ good.name }}</h1>
+                <p>{{ good.price }}</p>
+                <p>{{ good.type }}</p>
+            </div>
+            <img src="{{ good.img }}">
+        </div>
+        <div class="content_block_info">
+            <p>{{ good.info }}</p>
+            <div class="content_block_info_buttons">
+                <a href="/good/all">Назад</a>
+                <button type="button" onclick="AjaxButton({{ good.id }}, 'add')">Купить</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+        function AjaxButton(id, method){
+            jQuery.ajax({
+                type: "POST",
+                url: "/cart/" + method,
+                data: {id: id},
+                contentType: "application/x-www-form-urlencoded",
+                success: function (response) {
+                    console.log("Item added to cart");
+                },
+                error: function (error) {
+                    console.error("Error adding item to cart", error);
+                }
+            });
+        }
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'layouts/main.twig' %}
+{% block style %}
+
+    .content {
+    width: 300px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    }
+
+    h2 {
+    margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    }
+
+    .login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    }
+
+    .login-button:hover {
+    background-color: #218838;
+    }
+
+    .error-message {
+    color: #dc3545;
+    margin: 10px 0;
+    }
+{% endblock style %}
+{% block content %}
+    <div class="content__login">
+        <h2>Login</h2>
+        <form method="POST" action="/auth/login">
+            <input type="text" placeholder="Username" name="login">
+            <input type="password" placeholder="Password" name="password">
+            <button type="submit" class="login-button">Login</button>
+            {% if error %}
+                <div class="error-message" style = "display: block">Incorrect username or password</div>
+            {% endif %}
+        </form>
+    </div>
+{% endblock content %}

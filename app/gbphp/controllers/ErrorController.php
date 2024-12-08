@@ -2,11 +2,16 @@
 
 namespace App\controllers;
 
-class ErrorController extends ModelController
+class ErrorController extends Controller
 {
     protected $defaultAction = 'error';
+
     public function errorAction()
     {
-        return ['error' => '404'];
+        return $this->render(
+            'error',
+            [
+                'error' => '404'
+            ]);
     }
 }

@@ -2,32 +2,40 @@
 
 namespace App\controllers;
 
-use App\modules\Repositories\RUser;
+use App\main\App;
+use App\Repositories\UserRepository;
 
-class UserController extends ModelController
+class UserController extends Controller
 {
-    protected $oUser;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->oUser = new RUser();
-    }
 
     public function allAction()
     {
-        $users = $this->oUser->getAll();
-        return ['users' => $users];
+        $users = App::call()->UserRepository->getAll();
+        return $this->render(
+            'users',
+            [
+                'users' => $users
+            ]);
     }
 
     public function oneAction()
     {
-        $id = $this->getGRequest('id');
-        $user = $this->oUser->getOne($id);
+        $id = $this->getRequest('id');
+        $user = App::call()->UserRepository->getOne($id);
 
-        return [
-            'user' => $user,
-            'title' => 'Name'
-        ];
+        return $this->render(
+            'user',
+            [
+                'user' => $user,
+                'title' => 'Name'
+            ]);
+    }
+    public function addAction() //todo?
+    {
+        $this->postRequest('login');
+    }
+    public function updateAction()
+    {
+
     }
 }

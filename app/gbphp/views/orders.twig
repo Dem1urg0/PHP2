@@ -1,0 +1,129 @@
+{% extends 'layouts/main.twig' %}
+{% block style %}
+    .order-container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px auto;
+    padding: 20px;
+    min-width: 100px;
+    max-width: 600px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #fafafa;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Лёгкая тень */
+    }
+
+    .order-header {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin-bottom: 15px;
+    text-align: center;
+    }
+
+    .order-details p {
+    margin: 5px 0;
+    line-height: 1.4;
+    }
+
+    .product {
+    margin-left: 20px;
+    margin-top: 10px;
+    }
+
+    .product p {
+    margin: 5px 0;
+    }
+
+    .order-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    }
+
+    select {
+    padding: 8px 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 0.9em;
+    width: 100%; /* Растяжение под ширину блока */
+    }
+
+    .logout-btn {
+    padding: 10px;
+    font-size: 1em;
+    color: white;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
+
+    .logout-btn:hover {
+    background-color: #45a049;
+    }
+
+    .cancel-btn {
+    background-color: #f44336;
+    }
+
+    .cancel-btn:hover {
+    background-color: #e53935;
+    }
+{% endblock %}
+{% block content %}
+    <div class="orders">
+        {% for key, order in orders %}
+            <div class="order-container">
+                <div class="order-header">Order Details</div>
+                <div class="order-details">
+                    <p>order id: {{ key }}</p>
+                    <p>user id: {{ order.info.user_id }}</p>
+                    <h3>Products:</h3>
+                    {% for item in order.products %}
+                        <div class="product">
+                            <p>NAME: {{ item.name }}</p>
+                            <p>PRICE: {{ item.price }}</p>
+                            <p>COUNT: {{ item.count }}</p>
+                        </div>
+                    {% endfor %}
+                    <p>address: {{ order.info.address }}</p>
+                    <p>status: {{ order.info.status }}</p>
+                </div>
+                <div class="order-actions">
+                    <select id="typeStatus_{{ key }}">
+                        <option selected disabled>Выберите</option>
+                        <option value="new">new</option>
+                        <option value="in progress">in progress</option>
+                        <option value="done">done</option>
+                    </select>
+                    <input type="submit" class="logout-btn" value="Сменить статус" onclick="change('{{ key }}')">
+                    <form method="GET">
+                        <input type="hidden" name="p" value="user">
+                        <input type="hidden" name="a" value="delOrder">
+                        <input type="hidden" name="id" value="{{ key }}">
+                        <input type="submit" class="logout-btn cancel-btn" value="Отменить заказ">
+                    </form>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block script %}
+    function change(id) {
+    typeStatus = document.getElementById("typeStatus").value;
+    jQuery.ajax({
+    type: "POST",
+    url: "?p=orders&a=status&type=" + typeStatus + "&id=" + id,
+    success: function (date) {
+    console.log("OK");
+    }
+    });
+    setTimeout(function () {
+    window.location.reload();
+    }, 100);
+    }
+{% endblock script %}
+
+

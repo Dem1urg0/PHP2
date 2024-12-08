@@ -2,45 +2,45 @@
 
 namespace App\controllers;
 
-use App\modules\Repositories\RCart;
+use App\main\App;
+use function PHPUnit\Framework\throwException;
 
-class CartController extends ModelController
+class CartController extends Controller
 {
-    protected $oCart;
-    protected $defaultAction = 'get';
+    protected $defaultAction = 'all';
 
-    public function __construct()
+    public function allAction()
     {
-        parent::__construct();
-        $this->oCart = new RCart();
-    }
-
-    public function getAction()
-    {
-        $cart = $this->oCart->getCart();
-        return [
+        $cart = App::call()->CartService->getCart();
+        return $this->render('cart', [
             'cart' => $cart
-        ];
-    }
-
-    public function deleteAction()
-    {
-        $this->oCart->setParams(['id' => $this->getGRequest('id')]);
-        $this->oCart->delete();
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        ]);
     }
 
     public function addAction()
     {
-        $this->oCart->setParams(['id' => $this->getGRequest('id')]);
-        $this->oCart->addCart();
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+
+        App::call()->CartService->addToCart($this->PostId());
     }
 
     public function decAction()
     {
-        $this->oCart->setParams(['id' => $this->getGRequest('id')]);
-        $this->oCart->decCart();
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+        App::call()->CartService->decCart($this->PostId());
+    }
+
+
+    public function deleteAction()
+    {
+        App::call()->CartService->deleteFromCart($this->PostId());
+    }
+
+    public function PostId()
+    {
+        $id = App::call()->Request->post('id');
+        if ($id == []) {
+            throw new \Exception("404");
+        } else {
+            return $id;
+        }
     }
 }
