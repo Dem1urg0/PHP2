@@ -9,9 +9,9 @@ class CartService
     public function getCart()
     {
         $cart = [];
-        if ($cartSession = $this->isCartExist()) {
+        if ($cartSession = $this->getCartFromSession()) {
             foreach ($cartSession as $product) {
-                if ($item = get_object_vars(App::call()->GoodRepository->getOne($product['id']))) {
+                if ($item = get_object_vars($this->getProductsById($product['id']))) {
                     $cart[] = [
                         'id' => $item['id'],
                         'name' => $item['name'],
@@ -26,61 +26,100 @@ class CartService
 
     public function addToCart($id)
     {
-        if ($cart = $this->isCartExist()) {
+        if ($cart = $this->getCartFromSession()) {
             foreach ($cart as $key => $product) {
                 if ($product['id'] == $id) {
                     $cart[$key]['count'] += 1;
-                    App::call()->Request->sessionSet('cart', $cart);
-                    return;
+                    $this->setCart($cart);
+                    return [
+                        'msg' => 'Количество увеличено',
+                        'success' => true
+                    ];
                 }
             }
             $cart[] = ['id' => $id, 'count' => 1];
-            App::call()->Request->sessionSet('cart', $cart);
+            $this->setCart($cart);
+            return [
+                'msg' => 'Товар добавлен',
+                'success' => true
+            ];
         } else {
-            App::call()->Request->sessionSet('cart', [['id' => $id, 'count' => 1]]);
+            $this->setCart([['id' => $id, 'count' => 1]]);
+            return [
+                'msg' => 'Товар добавлен',
+                'success' => true
+            ];
         }
     }
 
     public function decCart($id)
     {
-        if (!$cart = $this->isCartExist()) {
-            throw new \Exception("404");
+        if (!$cart = $this->getCartFromSession()) {
+            return [
+                'msg' => 'Корзина пуста',
+                'success' => false
+            ];
         }
 
         foreach ($cart as $key => $product) {
             if ($product['id'] == $id) {
                 if ($cart[$key]['count'] > 1) {
                     $cart[$key]['count'] -= 1;
-                    App::call()->Request->sessionSet('cart', $cart);
-                    return;
+                    $this->setCart($cart);
+                    return [
+                        'msg' => 'Количество уменьшено',
+                        'success' => true
+                    ];
                 } else {
-                    $this->deleteAction();
-                    return;
+                    return $this->deleteFromCart($id);
                 }
             }
         }
+        return [
+            'msg' => 'Товар не найден',
+            'success' => false
+        ];
     }
 
-    public function deleteFromCart($id){
-        if (!$cart = $this->isCartExist()) {
-            throw new \Exception("404");
+    public function deleteFromCart($id)
+    {
+        if (!$cart = $this->getCartFromSession()) {
+            return [
+                'msg' => 'Корзина пуста',
+                'success' => false
+            ];
         }
-
-        $cart = App::call()->Request->sessionGet('cart');
 
         foreach ($cart as $key => $product) {
             if ($product['id'] == $id) {
                 unset($cart[$key]);
-                App::call()->Request->sessionSet('cart', $cart);
-                return;
+                $this->setCart($cart);
+                return [
+                    'msg' => 'Товар удален',
+                    'success' => true
+                ];
             }
         }
+        return [
+            'msg' => 'Товар не найден',
+            'success' => false
+        ];
     }
 
-    private function isCartExist()
+    protected function setCart($cart)
+    {
+        App::call()->Request->sessionSet('cart', $cart);
+    }
+
+    protected function getCartFromSession()
     {
         if ($cart = App::call()->Request->sessionGet('cart')) {
             return $cart;
         } else return false;
+    }
+
+    protected function getProductsById($id)
+    {
+        return App::call()->GoodRepository->getOne($id);
     }
 }

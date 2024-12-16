@@ -19,23 +19,33 @@ class OrderController extends Controller
                     'orders' => $sortOrders,
                 ]);
         } else {
-            throw new \Exception("404");
+            throw new \Exception("/auth/");
         }
     }
 
-    //todo смена статуса заказа
     public function setAction()
     {
-        if (empty($userId = App::call()->Request->sessionGet('user')['id'])
+        if (empty($user_id = App::call()->Request->sessionGet('user')['id'])
             || empty($cart = App::call()->Request->sessionGet('cart'))) {
-            return;
+            throw new \Exception("404");
         }
         $userData = [
-            'id' => $userId,
+            'id' => $user_id,
             'address' => '',
         ];
         App::call()->OrderService->orderFill($cart, $userData);
         return $this->oneAction();
     }
 
+    public function deleteAction(){
+        if (($user = App::call()->Request->sessionGet('user')) && ($order_id = App::call()->Request->post('id'))){
+            $params = [
+                'user_id' => $user['id'],
+                'order_id' => $order_id
+            ];
+            App::call()->OrderService->deleteOrder($params);
+        }
+        header('Location: /orders/');
+        return;
+    }
 }

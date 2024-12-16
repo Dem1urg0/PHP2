@@ -88,7 +88,7 @@ class Request
     }
     public function sessionAddToArr($key, $value)
     {
-        if(!isset($_SESSION[$key]) || !is_array($_SESSION[$key])){ // todo?
+        if(!isset($_SESSION[$key]) || !is_array($_SESSION[$key])){
             $_SESSION[$key] = [];
         }
         $_SESSION[$key][] = $value;

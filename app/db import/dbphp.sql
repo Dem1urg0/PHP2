@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: mariadb
--- Время создания: Дек 08 2024 г., 14:25
+-- Время создания: Дек 16 2024 г., 15:23
 -- Версия сервера: 10.4.34-MariaDB-1:10.4.34+maria~ubu2004
 -- Версия PHP: 8.2.23
 
@@ -66,8 +66,8 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `date`, `address`, `status`) VALUES
-(41, 1, '2024-12-06 13:45:04', '', 'create'),
-(42, 1, '2024-12-06 13:56:14', '', 'create');
+(47, 2, '2024-12-12 16:15:48', '', 'in delivery'),
+(48, 1, '2024-12-16 13:50:46', '', 'create');
 
 -- --------------------------------------------------------
 
@@ -86,11 +86,8 @@ CREATE TABLE `order_list` (
 --
 
 INSERT INTO `order_list` (`order_id`, `good_id`, `count`) VALUES
-(41, 1, 2),
-(41, 3, 2),
-(41, 4, 1),
-(42, 1, 1),
-(42, 2, 1);
+(47, 3, 3),
+(48, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -100,7 +97,7 @@ INSERT INTO `order_list` (`order_id`, `good_id`, `count`) VALUES
 
 CREATE TABLE `users` (
   `id` int(16) NOT NULL,
-  `name` varchar(32) NOT NULL,
+  `name` varchar(32) NOT NULL DEFAULT 'none',
   `login` varchar(16) NOT NULL,
   `password` varchar(64) NOT NULL,
   `role` int(11) DEFAULT NULL
@@ -111,11 +108,16 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `login`, `password`, `role`) VALUES
-(1, 'admin', 'admin', '$2y$10$sUplCOtvbTXwnB2IM4SdfOTJUJ6biOwzErWYdpJ0P9diEvR7tKzAq', 1),
+(1, 'admin', 'admin', '$2y$10$Gk97NKS08RRTF1IPDwnfJ.SPguLqc395GVtBvCV71r4gpyHC3z5qW', 1),
 (2, 'John', 'name09', '$2y$10$iopUmjicsmjZWEw5rDfDMuuDb3MRh02qdLfbBsFakgKnNi69AirDG', NULL),
 (3, 'Karl', 'Login01', '$2y$10$iopUmjicsmjZWEw5rDfDMuuDb3MRh02qdLfbBsFakgKnNi69AirDG', NULL),
 (4, 'Tuik', 'login091', '$2y$10$iopUmjicsmjZWEw5rDfDMuuDb3MRh02qdLfbBsFakgKnNi69AirDG', NULL),
-(5, 'Daloi', 'login1023', '$2y$10$dyqFNzNFFqL5RDe9.lrZBOnMjOuPuQC9Hx6RFSZQ.x4EVFNznbT/e', NULL);
+(5, 'Daloi', 'login1023', '$2y$10$dyqFNzNFFqL5RDe9.lrZBOnMjOuPuQC9Hx6RFSZQ.x4EVFNznbT/e', NULL),
+(10, 'none', 'Test', '$2y$10$.FCUks9bMpTqBmIdMfJX6.e9eORxow170n5y2Z04TL5bNpvU7bf9e', 0),
+(11, 'none', 'test', '$2y$10$kp9aoRXd1aU.L4hEmD37u.LxNhi52r/guzeMI46U83oBtwEQVZV1u', 0),
+(12, 'none', 'test', '$2y$10$Bw4Ul.lwCyhV9LYfHWKUP.muAXT8qlqISUZ7AX.STl7BumaOCsYJu', 0),
+(13, 'none', 'login1', '$2y$10$1HySHEZO1eygQcXNqOmkPeT0icZizjjXyoF2YfRmVwyN4CPPQ.yUG', 0),
+(14, 'none', 'Abc', '$2y$10$YPIOsv/VUXB1IukRfRgfUewxhLC/dtWoSbyOewKmfu50YojAqeKDO', 0);
 
 --
 -- Индексы сохранённых таблиц
@@ -161,13 +163,13 @@ ALTER TABLE `goods`
 -- AUTO_INCREMENT для таблицы `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(16) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- Ограничения внешнего ключа сохраненных таблиц

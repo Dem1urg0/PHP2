@@ -9,21 +9,21 @@ class AuthService
     public function auth($params)
     {
 
-        if (App::call()->UserService->hasError($params) || empty($params)) {
+        if ($this->hasError($params) || empty($params)) {
             return [
                 'msg' => 'Нет данных',
                 'success' => false,
             ];
         }
 
-        if(empty(App::call()->UserRepository->GetByLogin($params['login']))){
+        if (empty($userObj = $this->getUserByLogin($params['login']))) {
             return [
                 'msg' => 'Пользователь не найден',
                 'success' => false,
             ];
         }
 
-        $userData = get_object_vars(App::call()->UserRepository->GetByLogin($params['login']));
+        $userData = get_object_vars($userObj);
 
         if (password_verify($params['password'], $userData['password'])) {
             $userSession = [
@@ -36,14 +36,29 @@ class AuthService
             'success' => false,
         ];
 
-        App::call()->Request->sessionSet('user', $userSession);
+        $this->sessionSet('user', $userSession);
+
         return [
             'msg' => 'Успешно',
             'success' => true,
         ];
     }
-    public function roleCheck()
+
+    protected function hasError($params)
     {
-        //todo проверка на роль
+        if (empty($params['login']) || empty($params['password'])) {
+            return true;
+        }
+        return false;
+    }
+
+    protected function getUserByLogin($login)
+    {
+        return App::call()->UserRepository->getByLogin($login);
+    }
+
+    protected function sessionSet($name, $value)
+    {
+        return App::call()->Request->sessionSet($name, $value);
     }
 }

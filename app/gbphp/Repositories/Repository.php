@@ -111,13 +111,4 @@ abstract class Repository
                 return null;
         }
     }
-
-//    public function filling($params)
-//    {
-//        foreach ($params as $param => $value) {
-//            if (property_exists($this, $param)) {
-//                $this->$param = $value;
-//            }
-//        }
-//    }
 }

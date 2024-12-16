@@ -55,7 +55,15 @@
 </head>
 <body>
 <ul>
-    <li><a href="/auth/">Login</a></li>
+    {% if currentUser != null %}
+        <li><a href="/auth/logout">Logout</a></li>
+        <li><a href="/user/one?id={{ currentUser.id}}">Кабинет</a></li>
+        {% else %}
+        <li><a href="/auth/">Login</a></li>
+    {% endif %}
+    {% if currentUser['role'] == 1 %}
+        <li><a href="/admin/">Админка</a></li>
+    {% endif %}
     <li><a href="/user/all">Пользователи</a></li>
     <li><a href="/good/all">Товары</a></li>
     <li><a href="/cart/">Корзина</a></li>

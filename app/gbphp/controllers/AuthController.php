@@ -27,11 +27,11 @@ class AuthController extends Controller
                 'error' => true,
             ]);
         }
-        // todo сделать страницу пользователя на которую переходим после логина
     }
 
     public function logoutAction()
     {
         App::call()->Request->sessionDelete('user');
+        header('Location: /');
     }
 }

@@ -23,23 +23,17 @@
     border-radius: 5px;
     }
 
-    .login-button,
-    .buttons__block a {
-    width: 40%;
+    .login-button {
+    width: 100%;
     padding: 10px;
     background-color: #28a745;
     color: white;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px; /* Ensure the same font size */
     }
 
-    .login-button:hover,
-    .buttons__block a:hover {
+    .login-button:hover {
     background-color: #218838;
     }
 
@@ -47,28 +41,16 @@
     color: #dc3545;
     margin: 10px 0;
     }
-
-    .buttons__block {
-    display: flex;
-    justify-content: space-between;
-    }
-
-    .buttons__block a {
-    width: 30%;
-    }
 {% endblock style %}
 {% block content %}
     <div class="content__login">
-        <h2>Login</h2>
-        <form method="POST" action="/auth/login">
+        <h2>Registration</h2>
+        <form method="POST" action="/user/add">
             <input type="text" placeholder="Username" name="login">
             <input type="password" placeholder="Password" name="password">
-            <div class="buttons__block">
-                <button type="submit" class="login-button">Login</button>
-                <a href="/user/add/" class="login-button">Registration</a>
-            </div>
+            <button type="submit" class="login-button">Confirm</button>
             {% if error %}
-                <div class="error-message" style="display: block">Incorrect username or password</div>
+                <div class="error-message" style = "display: block">Введите данные</div>
             {% endif %}
         </form>
     </div>

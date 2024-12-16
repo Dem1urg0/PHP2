@@ -9,7 +9,9 @@ class RoleMiddleware
     public function checkAdmin()
     {
         if (!($user = App::call()->Request->sessionGet('user')) || $user['role'] !== 1){
-            header('Location:/auth');
+            return false;
+        } else {
+            return true;
         }
     }
 }

@@ -5,8 +5,8 @@ namespace App\Entities;
 class User extends Entity
 {
     public $id;
-    public $name;
+    public $name = 'none';
     public $password;
     public $login;
-    public $role;
+    public $role = 0;
 }

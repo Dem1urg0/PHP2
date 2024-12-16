@@ -6,7 +6,7 @@ return [
     'components' => [
         'db' => [
             'class' => \App\services\db::class,
-            'config' => [ //todo реализовать конфиги
+            'config' => [
                 'driver' => 'mysql',
                 'host' => 'mariadb',
                 'db' => 'dbphp',
